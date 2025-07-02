@@ -1,0 +1,118 @@
+
+main section .ver-producto{
+    height: 82%;
+    max-height: 82%;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    overflow-y: auto;         /* solo scroll vertical si se necesita */
+    display: flex;
+    flex-direction: column;
+}
+
+main section .ver-producto .opciones{
+    margin-left: auto;
+    margin-bottom: 1rem;
+    margin-right: 3rem;
+}
+
+main section .ver-producto .opciones img{
+    height: 2rem;
+    margin-left: 1rem;
+}
+
+main section .ver-producto form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1.2rem;
+}
+
+main section .ver-producto form label{
+    text-transform: uppercase;
+}
+
+main section .ver-producto form input{
+    background-color: #292C2D;
+    width: 85.5%;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    padding-left: 1rem;
+    height: 2rem;
+    color: white;
+}
+main section .ver-producto form .ultimas-opciones{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    text-align: center;
+}
+
+main section .ver-producto form .ultimas-opciones .descripcion {
+    margin-top: 0.5rem;
+}
+
+main section .ver-producto form .ultimas-opciones .descripcion textarea{
+  min-height: 12rem;
+  width: 100%;
+  resize: none;             /* opcional: evita que lo redimensionen */
+  padding: 1rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #292C2D;
+  border: none;
+  border-radius: 10px;
+  text-align: left;         /* asegura alineación horizontal */
+  vertical-align: top;      /* no es necesario con textarea, pero ayuda si usas display: inline-block */
+}
+
+main section .ver-producto form .subir-imagen img{
+    height: 10rem;
+} 
+
+main section .ver-producto form .subir-imagen .boton-imagen {
+    margin-top: 1rem;
+}
+
+main section .ver-producto form .subir-imagen .boton-imagen button{
+background-color: transparent;
+  color: white;
+  border: 1.5px solid white;
+  border-radius: 10px;      /* opcional: redondeado */
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+/* Contenedor para posicionar el $ */
+main section .ver-producto form .contenedor-precio {
+  position: relative;
+  width: 85.5%; /* igual que el input */
+}
+
+/* El $ flotante */
+main section .ver-producto form .contenedor-precio .simbolo-precio {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  pointer-events: none;
+  font-size: 1.2rem;
+}
+
+/* El input con padding para no solaparse con el $ */
+main section .ver-producto form .contenedor-precio input {
+  background-color: #292C2D;
+  width: 100%;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  padding-left: 2rem; /* espacio para el $ */
+  height: 2rem;
+  color: white;
+  border: none;
+  outline: none;
+}
