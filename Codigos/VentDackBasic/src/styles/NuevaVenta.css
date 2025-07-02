@@ -1,0 +1,222 @@
+main section .generar-nueva-venta{
+    display: grid;
+    grid-template-rows: 1fr 5fr 1fr;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    flex-direction: column;
+    height:83%;
+}
+
+main section .generar-nueva-venta .botones-elementales {
+    display: grid;
+    grid-template-columns: 30% 10% 60%;
+}
+
+main section .generar-nueva-venta .botones-elementales .buscador {
+    display: grid;
+    grid-template-columns: 20% 70%;
+    height: 3rem;
+    background-color: #292C2D;
+    margin-left: 1.2rem;
+    padding: 0.4rem;
+    border-radius: 2rem;
+    gap: 0
+}
+
+main section .generar-nueva-venta .botones-elementales .buscador .buscar {
+    text-align: end;
+    margin-right: 0.6rem;
+}
+
+
+main section .generar-nueva-venta .botones-elementales .buscador .buscar img {
+    text-align: center;
+    margin: auto;
+    margin-left: 0.2rem;
+    width: 2rem;
+}
+
+main section .generar-nueva-venta .botones-elementales .buscador input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    /* O el color que quieras para el texto que escribe el usuario */
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+main section .generar-nueva-venta .botones-elementales .buscador input::placeholder {
+    color: #ccc;
+    /* Color del texto "Buscar" */
+    opacity: 1;
+    /* Asegura que se vea bien */
+}
+
+main section .generar-nueva-venta .botones-elementales .checkbox{
+    display: grid;
+    grid-template-columns: 80% 20% ;
+    margin-top: 0.2rem;
+    margin-left: 1rem;
+    align-items: start; /* 🔥 Esta línea alinea verticalmente arriba */
+    width: 100%;
+}
+
+main section .generar-nueva-venta .botones-elementales .checkbox p{
+    color: white;
+    margin-top: 0.7rem;
+}
+
+@media (max-width: 1018px) {
+  /* Estilos para pantallas de 768px o menos */
+    main section .generar-nueva-venta .botones-elementales .checkbox{
+        display: block;
+        text-align: center;
+        height: 50%;
+        margin-top: 0;
+    }
+    main section .generar-nueva-venta .botones-elementales .checkbox p{
+        margin-top: 0;
+    }
+}
+
+main section .generar-nueva-venta .botones-elementales .productos-agregados{
+    display: grid;
+    grid-template-columns: 80% 20%;
+    margin-top: 0.7rem;
+    margin-right: 2rem;
+}
+
+main section .generar-nueva-venta .botones-elementales .productos-agregados .texto-productos-agregados{
+    color: white;
+    margin-left: 3rem;
+}
+
+main section .generar-nueva-venta .botones-elementales .productos-agregados .texto-productos-agregados p{
+    text-align: center;
+    text-transform: uppercase;
+}
+
+main section .generar-nueva-venta .botones-elementales .productos-agregados img{
+    width: 2.5rem;
+    justify-self: end;
+}
+
+
+main section .generar-nueva-venta .contenedores-venta{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 0.5rem;
+    margin-left: 1.5rem;
+    gap:0.8rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos,
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;  /* activa el scroll vertical solo si se necesita */
+    max-height: 24rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto,
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto{
+    background-color: #292C2D;
+    width: 95%;
+    border-radius: 0.4rem;
+    min-height: 5.5rem;
+    color: white;
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-arriba,
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-arriba{
+    display: grid;
+    grid-template-columns: 90% 10%;
+    margin-top: 1rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-arriba p,
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-arriba p{
+    margin-left: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-arriba img{
+    height: 1.5rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-arriba img{
+    margin-top: 0.5rem;
+    height: 0.5rem;
+}
+
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-abajo{
+    display: flex;
+    margin-left: 0.8rem;
+    margin-top: 1.3rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-abajo{
+    display: flex;
+    margin-left: 0.8rem;
+    margin-top: 1.8rem;
+}
+
+main section .generar-nueva-venta .generar-venta{
+    background-color: #C3E9DE;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    gap: 1rem;
+    height: 100%;
+    width: 20rem;
+    margin-left: auto;
+    padding-top: 1.3rem;
+    padding-left: 1.2rem;
+}
+
+main section .generar-nueva-venta .generar-venta p{
+    font-size: 1.5rem;
+}
+
+main section .generar-nueva-venta .generar-venta img{
+    height: 2rem;
+    margin-right: 3rem;
+}
+
+/*CSS CUANDO SE ACTIVA EL CHEKBOX*/
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-abajo p,
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-abajo p{
+    margin-right: 1rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-abajo img:first-of-type, 
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-abajo img:first-of-type {
+    margin: 0 1rem;
+    height: 1rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-abajo img:last-of-type, 
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-abajo img:last-of-type{
+    margin: 0.35rem 1rem 0 0;
+    height: 0.4rem;
+}
+
+main section .generar-nueva-venta .contenedores-venta .contenedor-productos .tarjeta-producto .tarjeta-abajo input, 
+main section .generar-nueva-venta .contenedores-venta .contenedor-venta .tarjeta-producto .tarjeta-abajo input{
+    background-color: transparent;
+    border: 2px solid white;
+    color: white; /* Para que el texto también sea blanco */
+    padding: 0.5rem;
+    border-radius: 5px; /* Opcional: bordes redondeados */
+    outline: none; /* Opcional: elimina borde azul al hacer focus */
+    height: 1rem;
+    width: 3rem;
+    text-align: center;
+}
+
+
