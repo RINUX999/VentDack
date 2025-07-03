@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "CommonJS",
     "outDir": "dist-electron",
-    "rootDir": "electron",
+    "rootDir": "electron",       // Cambiar a raíz del proyecto o a una carpeta que incluya electron y src/db
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,

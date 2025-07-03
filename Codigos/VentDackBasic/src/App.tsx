@@ -10,6 +10,7 @@ import Ventas from "./pages/Ventas"
 import Configuracion from "./pages/Configuracion"
 import Producto from "./pages/Producto"
 import Venta from "./pages/Venta"
+import { Ejemplo } from "./pages/Ejemplo"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Ventas" element={ <Ventas/> } />
         <Route path="/Venta" element={ <Venta/> } />
         <Route path="/Configuracion" element={ <Configuracion/> } />
+        <Route path="/Ejemplo" element={ <Ejemplo/> } />
       </Routes>
     </div>
   )

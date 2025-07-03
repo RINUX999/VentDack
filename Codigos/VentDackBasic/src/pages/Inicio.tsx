@@ -2,6 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import "../styles/Inicio.css"
 import Navegacion from "../components/Navegacion";
 import Header from "../components/Header";
+import { Link } from "react-router-dom";
 
 
 export default function Inicio() {
@@ -19,9 +20,11 @@ export default function Inicio() {
                     />
                     <div className="inicio-tarjetas">
                         <div className="inicio-tarjeta t1">
+                            <Link to="/Ejemplo" className="link">
                             <p className="inicio-titulo-tarjeta">
                                 Cantidad de Productos Registrados:
                             </p>
+                            </Link>
                             <p className="inicio-dato-tarjeta">
                                 100
                             </p>
