@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const uuid_1 = require("uuid");
 const ProductoVentaService_1 = require("./db/services/ProductoVentaService");
 function createWindow() {
     const win = new electron_1.BrowserWindow({
@@ -25,7 +27,7 @@ function createWindow() {
     }
 }
 electron_1.app.whenReady().then(() => {
-    // IPC handlers
+    // Handlers productos (existentes)
     electron_1.ipcMain.handle('producto:obtenerTodos', async () => {
         return await (0, ProductoVentaService_1.obtenerTodosLosProductos)();
     });
@@ -43,6 +45,60 @@ electron_1.app.whenReady().then(() => {
     });
     electron_1.ipcMain.handle('producto:eliminarVarios', async (_event, ids) => {
         await (0, ProductoVentaService_1.eliminarProductos)(ids);
+    });
+    // Handler antiguo (opcional, si sigues enviando ruta)
+    electron_1.ipcMain.handle('imagen:guardar', async (_event, rutaOriginal) => {
+        try {
+            const ext = path_1.default.extname(rutaOriginal);
+            const nombreUnico = `${Date.now()}-${(0, uuid_1.v4)()}${ext}`;
+            const carpetaDestino = path_1.default.join(electron_1.app.getPath('userData'), 'imagenes');
+            if (!fs_1.default.existsSync(carpetaDestino)) {
+                fs_1.default.mkdirSync(carpetaDestino, { recursive: true });
+            }
+            const rutaFinal = path_1.default.join(carpetaDestino, nombreUnico);
+            fs_1.default.copyFileSync(rutaOriginal, rutaFinal);
+            return rutaFinal;
+        }
+        catch (error) {
+            console.error('Error al guardar imagen:', error);
+            return null;
+        }
+    });
+    // --- NUEVO handler: guardar buffer de imagen enviado desde React ---
+    electron_1.ipcMain.handle('imagen:guardarBuffer', async (_event, buffer, nombreArchivo) => {
+        try {
+            const ext = path_1.default.extname(nombreArchivo) || '.png';
+            const nombreUnico = `${Date.now()}-${(0, uuid_1.v4)()}${ext}`;
+            const carpetaDestino = path_1.default.join(electron_1.app.getPath('userData'), 'imagenes');
+            if (!fs_1.default.existsSync(carpetaDestino)) {
+                fs_1.default.mkdirSync(carpetaDestino, { recursive: true });
+            }
+            const rutaFinal = path_1.default.join(carpetaDestino, nombreUnico);
+            // Guardamos buffer recibido
+            fs_1.default.writeFileSync(rutaFinal, Buffer.from(buffer));
+            return rutaFinal;
+        }
+        catch (error) {
+            console.error('Error al guardar imagen desde buffer:', error);
+            return null;
+        }
+    });
+    // Handler para eliminar imagen
+    electron_1.ipcMain.handle('imagen:eliminar', async (_event, ruta) => {
+        try {
+            if (fs_1.default.existsSync(ruta)) {
+                fs_1.default.unlinkSync(ruta);
+                return true;
+            }
+            else {
+                console.warn("La imagen no existe:", ruta);
+                return false;
+            }
+        }
+        catch (error) {
+            console.error('Error al eliminar imagen:', error);
+            return false;
+        }
     });
     createWindow();
     electron_1.app.on('activate', () => {

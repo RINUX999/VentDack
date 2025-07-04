@@ -9,6 +9,7 @@ import Productos from "./pages/Productos"
 import Ventas from "./pages/Ventas"
 import Configuracion from "./pages/Configuracion"
 import Producto from "./pages/Producto"
+import ProductoNuevo from "./pages/ProductoNuevo"
 import Venta from "./pages/Venta"
 import { Ejemplo } from "./pages/Ejemplo"
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/NuevaVenta" element={ <NuevaVenta/> } />
         <Route path="/Productos" element={ <Productos/> } />
         <Route path="/Producto" element={ <Producto/> } />
+        <Route path="/ProductoNuevo" element={ <ProductoNuevo/> } />
         <Route path="/Ventas" element={ <Ventas/> } />
         <Route path="/Venta" element={ <Venta/> } />
         <Route path="/Configuracion" element={ <Configuracion/> } />

@@ -54,7 +54,7 @@ main section .ver-producto form .ultimas-opciones .descripcion {
 }
 
 main section .ver-producto form .ultimas-opciones .descripcion textarea{
-  min-height: 12rem;
+  min-height: 10rem;
   width: 100%;
   resize: none;             /* opcional: evita que lo redimensionen */
   padding: 1rem;
@@ -69,6 +69,7 @@ main section .ver-producto form .ultimas-opciones .descripcion textarea{
 
 main section .ver-producto form .subir-imagen img{
     height: 10rem;
+    margin-top: 0.5rem;
 } 
 
 main section .ver-producto form .subir-imagen .boton-imagen {

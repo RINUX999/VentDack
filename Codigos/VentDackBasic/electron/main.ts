@@ -1,5 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   crearProducto,
@@ -30,7 +32,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  // IPC handlers
+  // Handlers productos (existentes)
   ipcMain.handle('producto:obtenerTodos', async () => {
     return await obtenerTodosLosProductos();
   });
@@ -54,6 +56,68 @@ app.whenReady().then(() => {
   ipcMain.handle('producto:eliminarVarios', async (_event, ids: string[]) => {
     await eliminarProductos(ids);
   });
+
+  // Handler antiguo (opcional, si sigues enviando ruta)
+  ipcMain.handle('imagen:guardar', async (_event, rutaOriginal: string) => {
+    try {
+      const ext = path.extname(rutaOriginal);
+      const nombreUnico = `${Date.now()}-${uuidv4()}${ext}`;
+      const carpetaDestino = path.join(app.getPath('userData'), 'imagenes');
+
+      if (!fs.existsSync(carpetaDestino)) {
+        fs.mkdirSync(carpetaDestino, { recursive: true });
+      }
+
+      const rutaFinal = path.join(carpetaDestino, nombreUnico);
+
+      fs.copyFileSync(rutaOriginal, rutaFinal);
+
+      return rutaFinal;
+    } catch (error) {
+      console.error('Error al guardar imagen:', error);
+      return null;
+    }
+  });
+
+  // --- NUEVO handler: guardar buffer de imagen enviado desde React ---
+  ipcMain.handle('imagen:guardarBuffer', async (_event, buffer: Uint8Array, nombreArchivo: string) => {
+    try {
+      const ext = path.extname(nombreArchivo) || '.png';
+      const nombreUnico = `${Date.now()}-${uuidv4()}${ext}`;
+      const carpetaDestino = path.join(app.getPath('userData'), 'imagenes');
+
+      if (!fs.existsSync(carpetaDestino)) {
+        fs.mkdirSync(carpetaDestino, { recursive: true });
+      }
+
+      const rutaFinal = path.join(carpetaDestino, nombreUnico);
+
+      // Guardamos buffer recibido
+      fs.writeFileSync(rutaFinal, Buffer.from(buffer));
+
+      return rutaFinal;
+    } catch (error) {
+      console.error('Error al guardar imagen desde buffer:', error);
+      return null;
+    }
+  });
+
+  // Handler para eliminar imagen
+  ipcMain.handle('imagen:eliminar', async (_event, ruta: string) => {
+    try {
+      if (fs.existsSync(ruta)) {
+        fs.unlinkSync(ruta);
+        return true;
+      } else {
+        console.warn("La imagen no existe:", ruta);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al eliminar imagen:', error);
+      return false;
+    }
+  });
+
 
   createWindow();
 

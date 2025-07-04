@@ -6,5 +6,4 @@ export type ProductoNuevo = {
   precio: number;
   descripcion?: string;
   url_img?: string;
-  creado_en?: string;
 } 

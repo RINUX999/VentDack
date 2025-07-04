@@ -5,10 +5,11 @@ import Navegacion from "../components/Navegacion";
 import "../styles/Productos.css"
 import ProductoTarjeta from "../components/ProductoTarjeta";
 
-import {useProduct} from "../hooks/useProduct"
+import { useProduct } from "../hooks/useProduct"
+import { Link } from "react-router-dom";
 export default function Productos() {
 
-    const {productos,obtenerProducto} = useProduct()
+    const { productos, obtenerProducto } = useProduct()
 
     return (
         <Fragment>
@@ -22,7 +23,6 @@ export default function Productos() {
                     <Header
                         pagina="Productos"
                     />
-
                     <div className="ver-productos">
                         <div className="botones-elementales">
                             <div className="buscador">
@@ -37,13 +37,17 @@ export default function Productos() {
                                 <option value="Sin elementos">Sin elementos</option>
                             </select>
                             <img src="/img/icono_clear.png" alt="" />
-                            <button>
-                                Nuevo
-                            </button>
+                            <Link
+                                to="/ProductoNuevo"
+                                className="link">
+                                <button>
+                                    Nuevo
+                                </button>
+                            </Link>
                         </div>
                         <div className="contenedor-productos">
-                            {productos.map((productoE)=> {
-                                return(
+                            {productos.map((productoE) => {
+                                return (
                                     <ProductoTarjeta
                                         producto={productoE}
                                     />

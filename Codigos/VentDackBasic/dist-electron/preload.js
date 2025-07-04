@@ -8,4 +8,7 @@ electron_1.contextBridge.exposeInMainWorld('api', {
     editarProducto: (producto) => electron_1.ipcRenderer.invoke('producto:editar', producto),
     eliminarProducto: (id) => electron_1.ipcRenderer.invoke('producto:eliminar', id),
     eliminarProductos: (ids) => electron_1.ipcRenderer.invoke('producto:eliminarVarios', ids),
+    guardarImagen: (ruta) => electron_1.ipcRenderer.invoke('imagen:guardar', ruta),
+    eliminarImagen: (ruta) => electron_1.ipcRenderer.invoke('imagen:eliminar', ruta),
+    guardarImagenBuffer: (buffer, nombreArchivo) => electron_1.ipcRenderer.invoke('imagen:guardarBuffer', buffer, nombreArchivo)
 });
