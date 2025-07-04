@@ -3,9 +3,13 @@ import Header from "../components/Header";
 import Navegacion from "../components/Navegacion";
 
 import "../styles/Productos.css"
-import { Link } from "react-router-dom";
+import ProductoTarjeta from "../components/ProductoTarjeta";
 
+import {useProduct} from "../hooks/useProduct"
 export default function Productos() {
+
+    const {productos,obtenerProducto} = useProduct()
+
     return (
         <Fragment>
             <main>
@@ -38,13 +42,14 @@ export default function Productos() {
                             </button>
                         </div>
                         <div className="contenedor-productos">
-                            <Link to="/Producto" className="link">
-                                <div className="contenedor-producto">
-                                    <p>
-                                        Brisa Urbana
-                                    </p>
-                                </div>
-                            </Link>
+                            {productos.map((productoE)=> {
+                                return(
+                                    <ProductoTarjeta
+                                        producto={productoE}
+                                    />
+                                )
+                            })
+                            }
                         </div>
                     </div>
                 </section>

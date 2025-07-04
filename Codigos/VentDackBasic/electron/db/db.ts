@@ -4,15 +4,27 @@ import fs from 'fs';
 import { app } from 'electron';
 
 const dbPath = path.join(app.getPath('userData'), 'database.db');
-const schemaPath = path.resolve(process.cwd(), 'electron/db/schema.sql');
-const schema = fs.readFileSync(schemaPath, 'utf8');
+const schemasDir = path.resolve(process.cwd(), 'electron/db/schemas');
 
 const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) return console.error('Error abrir DB:', err.message);
-  db.exec(schema, (err) => {
-    if (err) console.error('Error crear tablas:', err.message);
-    else console.log('Tablas listas');
-  });
+  if (err) {
+    console.error('Error al abrir la base de datos:', err.message);
+    return;
+  }
+
+  // Leer todos los archivos .sql dentro de la carpeta schemas
+  const files = fs.readdirSync(schemasDir).filter(f => f.endsWith('.sql'));
+
+  for (const file of files) {
+    const schema = fs.readFileSync(path.join(schemasDir, file), 'utf8');
+    db.exec(schema, (err) => {
+      if (err) {
+        console.error(`Error al ejecutar ${file}:`, err.message);
+      } else {
+        console.log(`Esquema ejecutado correctamente: ${file}`);
+      }
+    });
+  }
 });
 
 export default db;

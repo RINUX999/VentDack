@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
-const productosRepo_1 = require("./db/productosRepo");
+const ProductoVentaService_1 = require("./db/services/ProductoVentaService");
 function createWindow() {
     const win = new electron_1.BrowserWindow({
         width: 1200,
@@ -25,8 +25,25 @@ function createWindow() {
     }
 }
 electron_1.app.whenReady().then(() => {
-    electron_1.ipcMain.handle('producto:obtener', () => (0, productosRepo_1.obtenerProductos)());
-    electron_1.ipcMain.handle('producto:insertar', (_e, nombre, precio) => (0, productosRepo_1.insertarProducto)(nombre, precio));
+    // IPC handlers
+    electron_1.ipcMain.handle('producto:obtenerTodos', async () => {
+        return await (0, ProductoVentaService_1.obtenerTodosLosProductos)();
+    });
+    electron_1.ipcMain.handle('producto:obtenerPorId', async (_event, id) => {
+        return await (0, ProductoVentaService_1.obtenerProductoPorId)(id);
+    });
+    electron_1.ipcMain.handle('producto:crear', async (_event, producto) => {
+        await (0, ProductoVentaService_1.crearProducto)(producto);
+    });
+    electron_1.ipcMain.handle('producto:editar', async (_event, producto) => {
+        await (0, ProductoVentaService_1.editarProducto)(producto);
+    });
+    electron_1.ipcMain.handle('producto:eliminar', async (_event, id) => {
+        await (0, ProductoVentaService_1.eliminarProducto)(id);
+    });
+    electron_1.ipcMain.handle('producto:eliminarVarios', async (_event, ids) => {
+        await (0, ProductoVentaService_1.eliminarProductos)(ids);
+    });
     createWindow();
     electron_1.app.on('activate', () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0)
@@ -37,42 +54,3 @@ electron_1.app.on('window-all-closed', () => {
     if (process.platform !== 'darwin')
         electron_1.app.quit();
 });
-/*
-import { app, BrowserWindow } from 'electron';
-import path from 'path';
-
-//FUNCIONES DE LA BASE
-import { ipcMain } from 'electron';
-import { obtenerProductos, insertarProducto } from './db/productosRepo';
-
-
-
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.ts') // Si usas preload.ts
-    }
-  });
-
-  const isDev = !app.isPackaged;
-  if (isDev) {
-    win.loadURL('http://localhost:5173');
-  } else {
-    win.loadFile(path.join(__dirname, '../dist/index.html'));
-  }
-}
-
-app.whenReady().then(() => {
-  createWindow();
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-*/ 

@@ -1,12 +1,19 @@
 import { Fragment } from "react/jsx-runtime";
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from "../components/Header";
 import Navegacion from "../components/Navegacion";
-
-
 import "../styles/Producto.css"
+import { useLocation} from "react-router-dom";
+import type { ProductoNuevo } from "../types/models_types";
+
+
+
 
 export default function Producto() {
+
+    //Elemento Recuperado
+    const location = useLocation();
+    const producto = location.state?.producto as ProductoNuevo;
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [imagenURL, setImagenURL] = useState<string | null>(null);
@@ -29,8 +36,7 @@ export default function Producto() {
             inputRef.current?.click();
         }
     };
-
-
+    
     return (
         <Fragment>
             <main>
@@ -45,14 +51,13 @@ export default function Producto() {
                     />
 
                     <div className="ver-producto">
-
                         <div className="opciones">
                             <img src="/img/icono_eliminar.png" alt="" />
                             <img src="/img/icono_reset.png" alt="" />
                             <img src="/img/icono_guardar.png" alt="" />
                         </div>
                         <form>
-                            <label htmlFor="nombre">Nombre:</label>
+                            <label htmlFor="nombre">Nombre:{producto.nombre}</label>
                             <input type="text" id="nombre" name="nombre" />
                             <label htmlFor="nombre">Codigo:</label>
                             <input type="text" id="codigo" name="codigo" />
