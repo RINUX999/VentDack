@@ -252,12 +252,6 @@ export default function ProductoNuevo() {
                     </div>
                 </section>
 
-                <ModalExito
-                    body="Producto Actualizado"
-                    show={modalExitoActualizar}
-                    onHide={() => setModalExitoActualizar(false)}
-                />
-
                 <ModalError
                     body="No ingresaste nombre"
                     show={modalErrorNombre}

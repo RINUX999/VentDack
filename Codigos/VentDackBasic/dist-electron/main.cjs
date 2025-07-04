@@ -27,7 +27,21 @@ function createWindow() {
     }
 }
 electron_1.app.whenReady().then(() => {
-    // Handlers productos (existentes)
+    // Registrar protocolo personalizado para imágenes locales
+    electron_1.protocol.registerFileProtocol('app-img', (request, callback) => {
+        try {
+            // request.url es tipo "app-img://nombreArchivo.png"
+            const urlPath = request.url.replace('app-img://', '');
+            const carpetaImagenes = path_1.default.join(electron_1.app.getPath('userData'), 'imagenes');
+            const rutaImagen = path_1.default.join(carpetaImagenes, urlPath);
+            callback({ path: rutaImagen });
+        }
+        catch (error) {
+            console.error('Error en protocolo app-img:', error);
+            callback({ error: -6 }); // FILE_NOT_FOUND
+        }
+    });
+    // Handlers productos
     electron_1.ipcMain.handle('producto:obtenerTodos', async () => {
         return await (0, ProductoVentaService_1.obtenerTodosLosProductos)();
     });
@@ -46,25 +60,6 @@ electron_1.app.whenReady().then(() => {
     electron_1.ipcMain.handle('producto:eliminarVarios', async (_event, ids) => {
         await (0, ProductoVentaService_1.eliminarProductos)(ids);
     });
-    // Handler antiguo (opcional, si sigues enviando ruta)
-    electron_1.ipcMain.handle('imagen:guardar', async (_event, rutaOriginal) => {
-        try {
-            const ext = path_1.default.extname(rutaOriginal);
-            const nombreUnico = `${Date.now()}-${(0, uuid_1.v4)()}${ext}`;
-            const carpetaDestino = path_1.default.join(electron_1.app.getPath('userData'), 'imagenes');
-            if (!fs_1.default.existsSync(carpetaDestino)) {
-                fs_1.default.mkdirSync(carpetaDestino, { recursive: true });
-            }
-            const rutaFinal = path_1.default.join(carpetaDestino, nombreUnico);
-            fs_1.default.copyFileSync(rutaOriginal, rutaFinal);
-            return rutaFinal;
-        }
-        catch (error) {
-            console.error('Error al guardar imagen:', error);
-            return null;
-        }
-    });
-    // --- NUEVO handler: guardar buffer de imagen enviado desde React ---
     electron_1.ipcMain.handle('imagen:guardarBuffer', async (_event, buffer, nombreArchivo) => {
         try {
             const ext = path_1.default.extname(nombreArchivo) || '.png';
@@ -74,7 +69,6 @@ electron_1.app.whenReady().then(() => {
                 fs_1.default.mkdirSync(carpetaDestino, { recursive: true });
             }
             const rutaFinal = path_1.default.join(carpetaDestino, nombreUnico);
-            // Guardamos buffer recibido
             fs_1.default.writeFileSync(rutaFinal, Buffer.from(buffer));
             return rutaFinal;
         }
@@ -83,7 +77,6 @@ electron_1.app.whenReady().then(() => {
             return null;
         }
     });
-    // Handler para eliminar imagen
     electron_1.ipcMain.handle('imagen:eliminar', async (_event, ruta) => {
         try {
             if (fs_1.default.existsSync(ruta)) {

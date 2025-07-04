@@ -20,11 +20,10 @@ export default function Inicio() {
                     />
                     <div className="inicio-tarjetas">
                         <div className="inicio-tarjeta t1">
-                            <Link to="/Ejemplo" className="link">
                             <p className="inicio-titulo-tarjeta">
                                 Cantidad de Productos Registrados:
                             </p>
-                            </Link>
+                            
                             <p className="inicio-dato-tarjeta">
                                 100
                             </p>

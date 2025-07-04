@@ -80,7 +80,7 @@ main section .ver-productos .botones-elementales button{
   color: black;
   border: none;
   border-radius: 9999px; /* completamente redondeado */
-  padding: 0.5rem 1.2rem;
+  padding: 0.1rem 1.2rem;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
