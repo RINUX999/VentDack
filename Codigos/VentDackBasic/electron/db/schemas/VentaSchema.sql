@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS venta (
+  id TEXT PRIMARY KEY,         -- UUID o similar
+  fecha TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  total REAL NOT NULL
+);
