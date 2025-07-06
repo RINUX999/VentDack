@@ -14,18 +14,23 @@ const db = new sqlite3_1.default.Database(dbPath, (err) => {
         console.error('Error al abrir la base de datos:', err.message);
         return;
     }
-    // Leer todos los archivos .sql dentro de la carpeta schemas
-    const files = fs_1.default.readdirSync(schemasDir).filter(f => f.endsWith('.sql'));
-    for (const file of files) {
-        const schema = fs_1.default.readFileSync(path_1.default.join(schemasDir, file), 'utf8');
-        db.exec(schema, (err) => {
-            if (err) {
-                console.error(`Error al ejecutar ${file}:`, err.message);
-            }
-            else {
-                console.log(`Esquema ejecutado correctamente: ${file}`);
-            }
-        });
+    try {
+        // Leer todos los archivos .sql dentro de la carpeta schemas
+        const files = fs_1.default.readdirSync(schemasDir).filter(f => f.endsWith('.sql'));
+        for (const file of files) {
+            const schema = fs_1.default.readFileSync(path_1.default.join(schemasDir, file), 'utf8');
+            db.exec(schema, (err) => {
+                if (err) {
+                    console.error(`Error al ejecutar ${file}:`, err.message);
+                }
+                else {
+                    console.log(`Esquema ejecutado correctamente: ${file}`);
+                }
+            });
+        }
+    }
+    catch (readErr) {
+        console.error('Error leyendo los archivos de esquema SQL:', readErr);
     }
 });
 exports.default = db;

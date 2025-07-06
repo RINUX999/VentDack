@@ -12,18 +12,22 @@ const db = new sqlite3.Database(dbPath, (err) => {
     return;
   }
 
-  // Leer todos los archivos .sql dentro de la carpeta schemas
-  const files = fs.readdirSync(schemasDir).filter(f => f.endsWith('.sql'));
+  try {
+    // Leer todos los archivos .sql dentro de la carpeta schemas
+    const files = fs.readdirSync(schemasDir).filter(f => f.endsWith('.sql'));
 
-  for (const file of files) {
-    const schema = fs.readFileSync(path.join(schemasDir, file), 'utf8');
-    db.exec(schema, (err) => {
-      if (err) {
-        console.error(`Error al ejecutar ${file}:`, err.message);
-      } else {
-        console.log(`Esquema ejecutado correctamente: ${file}`);
-      }
-    });
+    for (const file of files) {
+      const schema = fs.readFileSync(path.join(schemasDir, file), 'utf8');
+      db.exec(schema, (err) => {
+        if (err) {
+          console.error(`Error al ejecutar ${file}:`, err.message);
+        } else {
+          console.log(`Esquema ejecutado correctamente: ${file}`);
+        }
+      });
+    }
+  } catch (readErr) {
+    console.error('Error leyendo los archivos de esquema SQL:', readErr);
   }
 });
 

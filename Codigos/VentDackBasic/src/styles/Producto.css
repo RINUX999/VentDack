@@ -18,6 +18,7 @@ main section .ver-producto .opciones{
 main section .ver-producto .opciones img{
     height: 2rem;
     margin-left: 1rem;
+    cursor: pointer;
 }
 
 main section .ver-producto form{

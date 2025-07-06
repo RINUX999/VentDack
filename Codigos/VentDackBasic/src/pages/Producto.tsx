@@ -133,11 +133,37 @@ export default function Producto() {
     }
   };
 
-  const confirmarActualizacion = () => {
-    // Simula actualización, puede ser llamada API real
+const confirmarActualizacion = async () => {
+  if (!productoBase) return;
+
+  try {
+    // Si el producto original tenía imagen y ahora ya no hay imagen, elimínala
+    if (productoBase.url_img && !rutaImagenLocal) {
+      await eliminarImagenElectron(productoBase.url_img);
+    }
+
+    const productoActualizado: ProductoNuevo = {
+      ...productoBase,
+      nombre,
+      codigo,
+      cantidad: typeof cantidad === "number" ? cantidad : 0,
+      precio: typeof precio === "number" ? precio : 0,
+      descripcion,
+      url_img: rutaImagenLocal || "",
+    };
+
+    // Aquí va la llamada real para guardar el producto actualizado en la base de datos
+    await window.api.editarProducto(productoActualizado);
+
     setModalActualizar(false);
     setModalExito(true);
-  };
+  } catch (error) {
+    console.error("Error actualizando producto:", error);
+    setModalActualizar(false);
+    // Puedes mostrar un modal de error si lo deseas
+  }
+};
+
 
   const resetearFormulario = () => {
     if (!productoBase) return;
