@@ -10,6 +10,7 @@ const uuid_1 = require("uuid");
 const ProductoVentaService_1 = require("./db/services/ProductoVentaService");
 const VentaService_1 = require("./db/services/VentaService");
 const DetalleVentaService_1 = require("./db/services/DetalleVentaService");
+const NegocioService_1 = require("./db/services/NegocioService");
 function createWindow() {
     const win = new electron_1.BrowserWindow({
         width: 1200,
@@ -71,9 +72,9 @@ electron_1.app.whenReady().then(() => {
         return await (0, VentaService_1.obtenerVentaPorId)(id);
     });
     electron_1.ipcMain.handle('venta:eliminar', async (_event, id) => {
-        await (0, VentaService_1.eliminarVenta)(id); // <-- handler para eliminar venta
+        await (0, VentaService_1.eliminarVenta)(id);
     });
-    // Detalle ventas
+    // Detalles de venta
     electron_1.ipcMain.handle('detalleVenta:crear', async (_event, detalle) => {
         await (0, DetalleVentaService_1.crearDetalleVenta)(detalle);
     });
@@ -81,9 +82,9 @@ electron_1.app.whenReady().then(() => {
         return await (0, DetalleVentaService_1.obtenerDetallesPorVentaId)(ventaId);
     });
     electron_1.ipcMain.handle('detalleVenta:eliminar', async (_event, id) => {
-        await (0, DetalleVentaService_1.eliminarDetalleVenta)(id); // <-- handler para eliminar detalle venta
+        await (0, DetalleVentaService_1.eliminarDetalleVenta)(id);
     });
-    electron_1.ipcMain.handle("detalleVenta:obtenerTodos", async () => {
+    electron_1.ipcMain.handle('detalleVenta:obtenerTodos', async () => {
         return await (0, DetalleVentaService_1.obtenerDetalles)();
     });
     // Imágenes
@@ -119,6 +120,19 @@ electron_1.app.whenReady().then(() => {
             console.error('Error al eliminar imagen:', error);
             return false;
         }
+    });
+    // Negocio
+    electron_1.ipcMain.handle('negocio:obtener', async () => {
+        return await (0, NegocioService_1.obtenerNegocio)();
+    });
+    electron_1.ipcMain.handle('negocio:guardar', async (_event, nombre) => {
+        await (0, NegocioService_1.guardarNegocio)(nombre);
+    });
+    electron_1.ipcMain.handle('negocio:editar', async (_event, id, nuevoNombre) => {
+        await (0, NegocioService_1.editarNegocio)(id, nuevoNombre);
+    });
+    electron_1.ipcMain.handle('negocio:eliminar', async (_event, id) => {
+        await (0, NegocioService_1.eliminarNegocio)(id);
     });
     createWindow();
     electron_1.app.on('activate', () => {

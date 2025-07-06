@@ -13,6 +13,10 @@ export function useVentas() {
     setError(null);
     try {
       const ventasData = await window.api.obtenerVentas();
+
+      // Ordenar por fecha descendente (más reciente primero)
+      ventasData.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+
       setVentas(ventasData);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));

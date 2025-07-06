@@ -14,7 +14,7 @@ electron_1.contextBridge.exposeInMainWorld("api", {
     obtenerVentas: () => electron_1.ipcRenderer.invoke("venta:obtenerTodas"),
     obtenerVentaPorId: (id) => electron_1.ipcRenderer.invoke("venta:obtenerPorId", id),
     eliminarVenta: (id) => electron_1.ipcRenderer.invoke("venta:eliminar", id),
-    // DetalleVentas
+    // Detalles de venta
     crearDetalleVenta: (detalle) => electron_1.ipcRenderer.invoke("detalleVenta:crear", detalle),
     obtenerDetallesPorVentaId: (ventaId) => electron_1.ipcRenderer.invoke("detalleVenta:obtenerPorVentaId", ventaId),
     eliminarDetalleVenta: (id) => electron_1.ipcRenderer.invoke("detalleVenta:eliminar", id),
@@ -22,4 +22,9 @@ electron_1.contextBridge.exposeInMainWorld("api", {
     // Imágenes
     guardarImagenBuffer: (buffer, nombreArchivo) => electron_1.ipcRenderer.invoke("imagen:guardarBuffer", buffer, nombreArchivo),
     eliminarImagen: (ruta) => electron_1.ipcRenderer.invoke("imagen:eliminar", ruta),
+    // Negocio
+    obtenerNegocio: () => electron_1.ipcRenderer.invoke("negocio:obtener"),
+    guardarNegocio: (nombre) => electron_1.ipcRenderer.invoke("negocio:guardar", nombre),
+    editarNegocio: (id, nuevoNombre) => electron_1.ipcRenderer.invoke("negocio:editar", id, nuevoNombre),
+    eliminarNegocio: (id) => electron_1.ipcRenderer.invoke("negocio:eliminar", id),
 });

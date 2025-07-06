@@ -16,15 +16,23 @@ import {
   crearVenta,
   obtenerTodasLasVentas,
   obtenerVentaPorId,
-  eliminarVenta    // <-- agrega la función para eliminar venta
+  eliminarVenta
 } from './db/services/VentaService';
 
 import {
   crearDetalleVenta,
   obtenerDetallesPorVentaId,
   obtenerDetalles,
-  eliminarDetalleVenta   
+  eliminarDetalleVenta
 } from './db/services/DetalleVentaService';
+
+import {
+  obtenerNegocio,
+  guardarNegocio,
+  editarNegocio,
+  eliminarNegocio
+} from './db/services/NegocioService';
+
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -62,18 +70,23 @@ app.whenReady().then(() => {
   ipcMain.handle('producto:obtenerTodos', async () => {
     return await obtenerTodosLosProductos();
   });
+
   ipcMain.handle('producto:obtenerPorId', async (_event, id: string) => {
     return await obtenerProductoPorId(id);
   });
+
   ipcMain.handle('producto:crear', async (_event, producto) => {
     await crearProducto(producto);
   });
+
   ipcMain.handle('producto:editar', async (_event, producto) => {
     await editarProducto(producto);
   });
+
   ipcMain.handle('producto:eliminar', async (_event, id: string) => {
     await eliminarProducto(id);
   });
+
   ipcMain.handle('producto:eliminarVarios', async (_event, ids: string[]) => {
     await eliminarProductos(ids);
   });
@@ -82,27 +95,33 @@ app.whenReady().then(() => {
   ipcMain.handle('venta:crear', async (_event, venta) => {
     await crearVenta(venta);
   });
+
   ipcMain.handle('venta:obtenerTodas', async () => {
     return await obtenerTodasLasVentas();
   });
+
   ipcMain.handle('venta:obtenerPorId', async (_event, id: string) => {
     return await obtenerVentaPorId(id);
   });
+
   ipcMain.handle('venta:eliminar', async (_event, id: string) => {
-    await eliminarVenta(id);   // <-- handler para eliminar venta
+    await eliminarVenta(id);
   });
 
-  // Detalle ventas
+  // Detalles de venta
   ipcMain.handle('detalleVenta:crear', async (_event, detalle) => {
     await crearDetalleVenta(detalle);
   });
+
   ipcMain.handle('detalleVenta:obtenerPorVentaId', async (_event, ventaId: string) => {
     return await obtenerDetallesPorVentaId(ventaId);
   });
+
   ipcMain.handle('detalleVenta:eliminar', async (_event, id: string) => {
-    await eliminarDetalleVenta(id);  // <-- handler para eliminar detalle venta
+    await eliminarDetalleVenta(id);
   });
-  ipcMain.handle("detalleVenta:obtenerTodos", async () => {
+
+  ipcMain.handle('detalleVenta:obtenerTodos', async () => {
     return await obtenerDetalles();
   });
 
@@ -141,6 +160,24 @@ app.whenReady().then(() => {
       return false;
     }
   });
+
+  // Negocio
+  ipcMain.handle('negocio:obtener', async () => {
+    return await obtenerNegocio();
+  });
+
+  ipcMain.handle('negocio:guardar', async (_event, nombre: string) => {
+    await guardarNegocio(nombre);
+  });
+
+  ipcMain.handle('negocio:editar', async (_event, id: string, nuevoNombre: string) => {
+    await editarNegocio(id, nuevoNombre);
+  });
+
+  ipcMain.handle('negocio:eliminar', async (_event, id: string) => {
+    await eliminarNegocio(id);
+  });
+
 
   createWindow();
 

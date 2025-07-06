@@ -37,7 +37,7 @@ contextBridge.exposeInMainWorld("api", {
   eliminarVenta: (id: string): Promise<void> =>
     ipcRenderer.invoke("venta:eliminar", id),
 
-  // DetalleVentas
+  // Detalles de venta
   crearDetalleVenta: (detalle: DetalleVenta): Promise<void> =>
     ipcRenderer.invoke("detalleVenta:crear", detalle),
 
@@ -46,7 +46,7 @@ contextBridge.exposeInMainWorld("api", {
 
   eliminarDetalleVenta: (id: string): Promise<void> =>
     ipcRenderer.invoke("detalleVenta:eliminar", id),
- 
+
   obtenerDetalles: (): Promise<DetalleVenta[]> =>
     ipcRenderer.invoke("detalleVenta:obtenerTodos"),
 
@@ -59,4 +59,18 @@ contextBridge.exposeInMainWorld("api", {
 
   eliminarImagen: (ruta: string): Promise<boolean> =>
     ipcRenderer.invoke("imagen:eliminar", ruta),
+  
+  // Negocio
+  obtenerNegocio: (): Promise<{ id: string; nombre: string } | null> =>
+    ipcRenderer.invoke("negocio:obtener"),
+
+  guardarNegocio: (nombre: string): Promise<void> =>
+    ipcRenderer.invoke("negocio:guardar", nombre),
+
+  editarNegocio: (id: string, nuevoNombre: string): Promise<void> =>
+    ipcRenderer.invoke("negocio:editar", id, nuevoNombre),
+
+  eliminarNegocio: (id: string): Promise<void> =>
+    ipcRenderer.invoke("negocio:eliminar", id),
+
 });

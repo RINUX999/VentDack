@@ -1,16 +1,16 @@
 import db from '../db';
 import type DetalleVenta from '../models/DetalleVenta';
 
-/** Crear un nuevo detalle de venta */
 export function crearDetalleVenta(detalle: DetalleVenta): Promise<void> {
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(`
-      INSERT INTO detalle_venta (id, venta_id, nombre, codigo, cantidad, subtotal)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO detalle_venta (id, venta_id, producto_id, nombre, codigo, cantidad, subtotal)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       detalle.id,
       detalle.venta_id,
+      detalle.producto_id,
       detalle.nombre,
       detalle.codigo,
       detalle.cantidad,
@@ -21,7 +21,6 @@ export function crearDetalleVenta(detalle: DetalleVenta): Promise<void> {
   });
 }
 
-/** Obtener detalles por ID de venta */
 export function obtenerDetallesPorVentaId(ventaId: string): Promise<DetalleVenta[]> {
   return new Promise((resolve, reject) => {
     db.all(
@@ -35,7 +34,6 @@ export function obtenerDetallesPorVentaId(ventaId: string): Promise<DetalleVenta
   });
 }
 
-/** Eliminar detalle de venta por ID */
 export function eliminarDetalleVenta(id: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(`DELETE FROM detalle_venta WHERE id = ?`);
@@ -59,4 +57,3 @@ export function obtenerDetalles(): Promise<DetalleVenta[]> {
     );
   });
 }
-

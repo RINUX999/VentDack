@@ -26,3 +26,7 @@ main section .configuracion .boton{
     text-align: end;
     width: 60%;
 }
+
+main section .configuracion .boton p{
+    cursor: pointer;
+}

@@ -20,7 +20,7 @@ export default function TarjetaVenta({ venta }: TarjetaVentaProps) {
 
   // Filtrar detalles para esta venta cuando detalles cambien o venta cambie
   useEffect(() => {
-    const filtrados = detalles.filter(d => d.ventaId === venta.id);
+    const filtrados = detalles.filter(d => d.venta_id === venta.id);
     setDetallesVenta(filtrados);
   }, [detalles, venta]);
 

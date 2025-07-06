@@ -5,10 +5,11 @@ import Header from "../components/Header";
 import TarjetaProducto from "../components/TarjetaProducto";
 import TarjetaProductoVenta from "../components/TarjetaProductoVenta";
 import { useProduct } from "../hooks/useProduct";
-import type { ProductoNuevo } from "../types/models_types";
+import type { ProductoNuevo,DetalleVenta } from "../types/models_types";
 import "../styles/NuevaVenta.css";
-import ModalAdvertencia from "../components/ModalAdvertencia";
 import ModalError from "../components/ModalError";
+import ModalExito from "../components/ModalExito";
+import { Modal, Button, Spinner } from "react-bootstrap";
 
 export default function NuevaVenta() {
   const { productos } = useProduct();
@@ -16,22 +17,25 @@ export default function NuevaVenta() {
   const [productosBuscados, setProductosBuscados] = useState<ProductoNuevo[]>([]);
   const [busqueda, setBusqueda] = useState('');
   const [productosTicket, setProductosTicket] = useState<ProductoNuevo[]>([]);
-  const [modalConfirmacionGuardar, setModalConfirmacionGuardar] = useState(false);
-  const [modalErrorNoProductos, setModalErrorNoProductos] = useState(false);
+
+  const [modalGuardarVenta, setModalGuardarVenta] = useState(false);
+  const [modalError, setModalError] = useState(false);
+  const [modalExito, setModalExito] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [cargando, setCargando] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (productos) {
       setProductosDisponibles([...productos]);
-      if (busqueda && busqueda !== "") {
-        const productosB = productos.filter(producto =>
-          producto.nombre.toLowerCase().startsWith(busqueda.toLowerCase()) ||
-          producto.codigo?.startsWith(busqueda)
-        );
-        setProductosBuscados([...productosB]);
-      } else {
-        setProductosBuscados([...productos]);
-      }
+      const filtrados = busqueda
+        ? productos.filter(p =>
+          p.nombre.toLowerCase().startsWith(busqueda.toLowerCase()) ||
+          p.codigo?.startsWith(busqueda)
+        )
+        : productos;
+      setProductosBuscados(filtrados);
     }
   }, [productos, busqueda]);
 
@@ -49,54 +53,70 @@ export default function NuevaVenta() {
   };
 
   const guardarVenta = async () => {
-    try {
-      if (productosTicket.length === 0) {
-        setModalConfirmacionGuardar(false);
-        setModalErrorNoProductos(true);
-        return;
-      }
+  if (productosTicket.length === 0) {
+    setModalGuardarVenta(false);
+    setErrorMsg("No hay productos en el ticket.");
+    setModalError(true);
+    return;
+  }
 
-      const idVenta = crypto.randomUUID();
-      const fecha = new Date().toISOString();
-      const totalVenta = total;
+  setCargando(true);
+  try {
+    const idVenta = crypto.randomUUID();
+    const fecha = new Date().toISOString();
+    const cantidad_total = productosTicket.reduce((acc, p) => acc + (p.cantidad ?? 0), 0);
 
-      const cantidad_total = productosTicket.reduce(
-        (acc, producto) => acc + (producto.cantidad ?? 0),
-        0
-      );
+    const venta = {
+      id: idVenta,
+      fecha,
+      total,
+      cantidad_total,
+    };
 
-      const venta = {
-        id: idVenta,
-        fecha,
-        total: totalVenta,
-        cantidad_total,
+    await window.api.crearVenta(venta);
+
+    for (const producto of productosTicket) {
+      const cantidadVendida = producto.cantidad ?? 1;
+
+      const detalle: DetalleVenta = {
+        id: crypto.randomUUID(),
+        venta_id: idVenta,             // importante: id de la venta
+        producto_id: producto.id,      // importante: id del producto
+        nombre: producto.nombre,
+        codigo: producto.codigo ?? "",
+        cantidad: cantidadVendida,
+        subtotal: cantidadVendida * (producto.precio ?? 0),
       };
 
-      console.log("Guardando venta:", venta);
-      await window.api.crearVenta(venta);
+      await window.api.crearDetalleVenta(detalle);
 
-      for (const producto of productosTicket) {
-        const detalleVenta = {
-          id: crypto.randomUUID(),
-          venta_id: idVenta, // 🟢 aseguramos que el campo se llame venta_id como en DB
-          nombre: producto.nombre,
-          codigo: producto.codigo ?? "",
-          cantidad: producto.cantidad ?? 1,
-          subtotal: (producto.cantidad ?? 1) * (producto.precio ?? 0),
+      // Actualizar cantidad del producto
+      const original = productos.find(p => p.id === producto.id);
+      if (original) {
+        const actualizado = {
+          ...original,
+          cantidad: Math.max((original.cantidad ?? 0) - cantidadVendida, 0),
         };
-
-        console.log("Creando detalle:", detalleVenta);
-        await window.api.crearDetalleVenta(detalleVenta);
+        await window.api.editarProducto(actualizado);
       }
-
-      setModalConfirmacionGuardar(false);
-      setProductosTicket([]);
-      navigate("/Ventas");
-
-    } catch (error) {
-      console.error("Error al guardar venta:", error);
-      alert("Ocurrió un error al guardar la venta: " + (error instanceof Error ? error.message : String(error)));
     }
+
+    setCargando(false);
+    setModalGuardarVenta(false);
+    setProductosTicket([]);
+    setModalExito(true);
+  } catch (error: any) {
+    setCargando(false);
+    setModalGuardarVenta(false);
+    setErrorMsg(error?.message || "Ocurrió un error al guardar la venta.");
+    setModalError(true);
+  }
+};
+
+
+  const cerrarExito = () => {
+    setModalExito(false);
+    navigate("/Ventas");
   };
 
   return (
@@ -154,7 +174,7 @@ export default function NuevaVenta() {
             <div
               className="generar-venta"
               style={{ cursor: "pointer" }}
-              onClick={() => setModalConfirmacionGuardar(true)}
+              onClick={() => setModalGuardarVenta(true)}
             >
               <p>${total.toFixed(2)}</p>
               <img src="/img/icono_recibo.png" alt="Guardar venta" />
@@ -163,19 +183,46 @@ export default function NuevaVenta() {
         </section>
       </main>
 
-      <ModalAdvertencia
-        titulo="¿Seguro que quieres guardar esta venta?"
-        body="Se guardará la venta con los productos seleccionados."
-        textBoton="Guardar"
-        show={modalConfirmacionGuardar}
-        onHide={() => setModalConfirmacionGuardar(false)}
-        onConfirmar={guardarVenta}
-      />
+      <Modal
+        show={modalGuardarVenta}
+        onHide={() => setModalGuardarVenta(false)}
+        size="lg"
+        centered
+        backdrop={cargando ? "static" : true}
+        keyboard={!cargando}
+      >
+        <Modal.Header closeButton={!cargando}>
+          <Modal.Title>¿Confirmar venta?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>¿Deseas guardar esta venta con los productos seleccionados?</p>
+          {cargando && (
+            <div className="d-flex align-items-center">
+              <Spinner animation="border" className="me-2" />
+              <span>Guardando venta, por favor espera...</span>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setModalGuardarVenta(false)} disabled={cargando}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={guardarVenta} disabled={cargando}>
+            Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <ModalError
-        body="No hay productos en el ticket para guardar la venta."
-        show={modalErrorNoProductos}
-        onHide={() => setModalErrorNoProductos(false)}
+        body={errorMsg}
+        show={modalError}
+        onHide={() => setModalError(false)}
+      />
+
+      <ModalExito
+        body="Venta guardada exitosamente."
+        show={modalExito}
+        onHide={cerrarExito}
       />
     </Fragment>
   );

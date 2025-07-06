@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS negocio (
+  id TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL
+);

@@ -8,18 +8,16 @@ exports.obtenerDetallesPorVentaId = obtenerDetallesPorVentaId;
 exports.eliminarDetalleVenta = eliminarDetalleVenta;
 exports.obtenerDetalles = obtenerDetalles;
 const db_1 = __importDefault(require("../db"));
-/** Crear un nuevo detalle de venta */
 function crearDetalleVenta(detalle) {
     return new Promise((resolve, reject) => {
         const stmt = db_1.default.prepare(`
-      INSERT INTO detalle_venta (id, venta_id, nombre, codigo, cantidad, subtotal)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO detalle_venta (id, venta_id, producto_id, nombre, codigo, cantidad, subtotal)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-        stmt.run(detalle.id, detalle.venta_id, detalle.nombre, detalle.codigo, detalle.cantidad, detalle.subtotal, (err) => (err ? reject(err) : resolve()));
+        stmt.run(detalle.id, detalle.venta_id, detalle.producto_id, detalle.nombre, detalle.codigo, detalle.cantidad, detalle.subtotal, (err) => (err ? reject(err) : resolve()));
         stmt.finalize();
     });
 }
-/** Obtener detalles por ID de venta */
 function obtenerDetallesPorVentaId(ventaId) {
     return new Promise((resolve, reject) => {
         db_1.default.all(`SELECT * FROM detalle_venta WHERE venta_id = ?`, [ventaId], (err, rows) => {
@@ -30,7 +28,6 @@ function obtenerDetallesPorVentaId(ventaId) {
         });
     });
 }
-/** Eliminar detalle de venta por ID */
 function eliminarDetalleVenta(id) {
     return new Promise((resolve, reject) => {
         const stmt = db_1.default.prepare(`DELETE FROM detalle_venta WHERE id = ?`);
