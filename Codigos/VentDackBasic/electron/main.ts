@@ -12,6 +12,20 @@ import {
   eliminarProductos
 } from './db/services/ProductoVentaService';
 
+import {
+  crearVenta,
+  obtenerTodasLasVentas,
+  obtenerVentaPorId,
+  eliminarVenta    // <-- agrega la función para eliminar venta
+} from './db/services/VentaService';
+
+import {
+  crearDetalleVenta,
+  obtenerDetallesPorVentaId,
+  obtenerDetalles,
+  eliminarDetalleVenta   
+} from './db/services/DetalleVentaService';
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
@@ -32,21 +46,19 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  // Registrar protocolo personalizado para imágenes locales
   protocol.registerFileProtocol('app-img', (request, callback) => {
     try {
-      // request.url es tipo "app-img://nombreArchivo.png"
       const urlPath = request.url.replace('app-img://', '');
       const carpetaImagenes = path.join(app.getPath('userData'), 'imagenes');
       const rutaImagen = path.join(carpetaImagenes, urlPath);
       callback({ path: rutaImagen });
     } catch (error) {
       console.error('Error en protocolo app-img:', error);
-      callback({ error: -6 }); // FILE_NOT_FOUND
+      callback({ error: -6 });
     }
   });
 
-  // Handlers productos
+  // Productos
   ipcMain.handle('producto:obtenerTodos', async () => {
     return await obtenerTodosLosProductos();
   });
@@ -66,6 +78,35 @@ app.whenReady().then(() => {
     await eliminarProductos(ids);
   });
 
+  // Ventas
+  ipcMain.handle('venta:crear', async (_event, venta) => {
+    await crearVenta(venta);
+  });
+  ipcMain.handle('venta:obtenerTodas', async () => {
+    return await obtenerTodasLasVentas();
+  });
+  ipcMain.handle('venta:obtenerPorId', async (_event, id: string) => {
+    return await obtenerVentaPorId(id);
+  });
+  ipcMain.handle('venta:eliminar', async (_event, id: string) => {
+    await eliminarVenta(id);   // <-- handler para eliminar venta
+  });
+
+  // Detalle ventas
+  ipcMain.handle('detalleVenta:crear', async (_event, detalle) => {
+    await crearDetalleVenta(detalle);
+  });
+  ipcMain.handle('detalleVenta:obtenerPorVentaId', async (_event, ventaId: string) => {
+    return await obtenerDetallesPorVentaId(ventaId);
+  });
+  ipcMain.handle('detalleVenta:eliminar', async (_event, id: string) => {
+    await eliminarDetalleVenta(id);  // <-- handler para eliminar detalle venta
+  });
+  ipcMain.handle("detalleVenta:obtenerTodos", async () => {
+    return await obtenerDetalles();
+  });
+
+  // Imágenes
   ipcMain.handle('imagen:guardarBuffer', async (_event, buffer: Uint8Array, nombreArchivo: string) => {
     try {
       const ext = path.extname(nombreArchivo) || '.png';

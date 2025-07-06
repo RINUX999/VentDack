@@ -26,7 +26,7 @@ main section .ver-ventas .buscador .eleccion p{
 }
 
 main section .ver-ventas .buscador .eleccion select{
-        background-color: #292C2D;
+    background-color: #292C2D;
     color: white;
     border: 1px solid white;
     padding: 0.5rem;
@@ -43,7 +43,7 @@ main section .ver-ventas .buscador img{
 }
 
 main section .ver-ventas .contenedor-ventas{
-    height: 67vh;
+    height: 63vh;
     width: 97%;
     margin-top: 1rem;
     display: flex;
@@ -55,7 +55,7 @@ main section .ver-ventas .contenedor-ventas{
 
 main section .ver-ventas .contenedor-ventas .contenedor-venta{
     margin-top: 0.5rem 1rem;
-    height: 5.3rem;
+    min-height: 4rem;
     background-color: #C9CAEE;
     border-radius: 0.5rem;
     padding: 1rem;
@@ -80,7 +80,7 @@ main section .ver-ventas  .cantidad-ventas{
     display: flex;
     flex-direction: column;
     margin-right: 2.2rem;
-    height: 2.5rem;
+    min-height: 2rem;
     width: 40%;
     background-color: #D9D9D9;
     text-align: center;

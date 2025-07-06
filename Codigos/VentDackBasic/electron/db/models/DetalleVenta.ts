@@ -1,7 +1,8 @@
-export default interface DetalleVenta{
-  id: string;           // UUID
-  venta_id: string;     // FK a Venta
-  producto_id: string;  // FK a ProductoVenta
+export default interface DetalleVenta {
+  id: string;
+  venta_id: string;
+  nombre: string;
+  codigo: string;
   cantidad: number;
-  subtotal: number;     // cantidad * precio del momento
-};
+  subtotal: number;
+}

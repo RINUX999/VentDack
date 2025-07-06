@@ -1,31 +1,33 @@
-import { Fragment } from "react/jsx-runtime";
+import { Fragment } from "react";
 
-export default function InfoVenta() {
+type InfoVentaProps = {
+  producto: string;
+  precio: number;
+  cantidad: number;
+  total: number;
+};
+
+export default function InfoVenta({ producto, precio, cantidad, total }: InfoVentaProps) {
+  
+    console.log(producto)
+
     return (
-        <Fragment>
-            <div className="elemento">
-                <div className="caracteristica">
-                    <p>
-                        Brisa Urbama
-                    </p>
-                </div>
-                <div className="caracteristica">
-                    <p>
-                        $200
-                    </p>
-                </div>
-                <div className="caracteristica">
-                    <p>
-                        2
-                    </p>
-                </div>
 
-                <div className="caracteristica">
-                    <p>
-                        $400
-                    </p>
-                </div>
-            </div>
-        </Fragment>
-    )
+    <Fragment>
+      <div className="elemento">
+        <div className="caracteristica">
+          <p>{producto}</p>
+        </div>
+        <div className="caracteristica">
+          <p>${precio}</p>
+        </div>
+        <div className="caracteristica">
+          <p>{cantidad}</p>
+        </div>
+        <div className="caracteristica">
+          <p>${total}</p>
+        </div>
+      </div>
+    </Fragment>
+  );
 }

@@ -4,8 +4,13 @@ import Header from "../components/Header";
 
 import "../styles/Ventas.css"
 import { Link } from "react-router-dom";
+import TarjetaVenta from "../components/TarjetaVenta";
+import { useVentas } from "../hooks/useVenta";
 
 export default function Ventas() {
+
+    const { ventas } = useVentas()
+
     return (
         <Fragment>
             <main>
@@ -100,28 +105,18 @@ export default function Ventas() {
                             <img src="/img/icono_clear.png" alt="" />
                         </div>
                         <div className="contenedor-ventas">
-                            <Link to="/Venta" className="link">
-                                <div className="contenedor-venta">
-                                    <p>
-                                        Total: $2000
-                                    </p>
-                                    <div className="descripcion-venta">
-                                        <p>
-                                            Productos Vendidos: 10
-                                        </p>
-                                        <p>
-                                            Fecha: 10 / Diciembre / 2025
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            {ventas
+                            .map(venta =>
+                                <TarjetaVenta
+                                    venta={venta}
+                                />)}
                         </div>
                         <div className="cantidad-ventas">
                             <p>
                                 Numero de ventas: 20
                             </p>
                             <p>
-                                Total: $200
+                                Total Acumulado: $200
                             </p>
                         </div>
                     </div>
