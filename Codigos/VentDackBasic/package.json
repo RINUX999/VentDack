@@ -7,7 +7,9 @@
     "build": "vite build",
     "electron:build": "tsc -p tsconfig.electron.json && mv dist-electron/main.js dist-electron/main.cjs",
     "electron": "electron dist-electron/main.cjs",
-    "start": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && npm run electron:build && npm run electron\""
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -15,6 +17,7 @@
     "@mui/material": "^7.2.0",
     "bootstrap": "^5.3.7",
     "buffer": "^6.0.3",
+    "electron-squirrel-startup": "^1.0.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.10",
     "react-bootstrap-icons": "^1.11.6",
@@ -24,6 +27,12 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.8.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
+    "@electron-forge/maker-zip": "^7.8.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
+    "@electron-forge/plugin-fuses": "^7.8.1",
+    "@electron/fuses": "^1.8.0",
     "@eslint/js": "^9.29.0",
     "@types/node": "^24.0.8",
     "@types/react": "^19.1.8",
@@ -41,5 +50,24 @@
     "typescript-eslint": "^8.34.1",
     "vite": "^7.0.0",
     "wait-on": "^8.0.3"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "icono"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ventdackbasic"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": ["win32"]
+        }
+      ]
+    }
   }
 }
