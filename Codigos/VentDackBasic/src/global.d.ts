@@ -39,6 +39,9 @@ declare global {
       // Importar / Exportar SQL
       importarSQL?: () => Promise<void>;
       exportarSQL?: () => Promise<void>;
+
+      // Códigos de desbloqueo mensual
+      obtenerCodigosRenta: () => Promise<{ fecha: string; codigo: string }[] | null>;
     };
   }
 }

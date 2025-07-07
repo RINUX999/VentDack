@@ -30,4 +30,6 @@ electron_1.contextBridge.exposeInMainWorld('api', {
     // --- IMPORTAR / EXPORTAR SQL ---
     importarSQL: () => electron_1.ipcRenderer.invoke('importarSQL'),
     exportarSQL: () => electron_1.ipcRenderer.invoke('exportarSQL'),
+    // --- CÓDIGOS DE DESBLOQUEO ---
+    obtenerCodigosRenta: () => electron_1.ipcRenderer.invoke('codigos:obtener'),
 });

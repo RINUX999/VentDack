@@ -78,4 +78,9 @@ contextBridge.exposeInMainWorld('api', {
 
   exportarSQL: (): Promise<void> =>
     ipcRenderer.invoke('exportarSQL'),
+
+  // --- CÓDIGOS DE DESBLOQUEO ---
+  obtenerCodigosRenta: (): Promise<
+    { fecha: string; codigo: string }[] | null
+  > => ipcRenderer.invoke('codigos:obtener'),
 });
